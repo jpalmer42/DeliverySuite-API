@@ -19,14 +19,18 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity
 public class SecurityConfig {
 	@Autowired
-	FilterAuthFirebase authFilter;
+	FilterAuthFirebase filterFirebase;
+
+	@Autowired
+	FilterAuthAPI filterAPI;
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.csrf(csrf -> csrf.disable());
 		http.authorizeHttpRequests(auth -> auth.requestMatchers("/list/**").permitAll());
 		http.authorizeHttpRequests(auth -> auth.anyRequest().authenticated());
-		http.addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
+		http.addFilterBefore(filterFirebase, UsernamePasswordAuthenticationFilter.class);
+		http.addFilterBefore(filterAPI, UsernamePasswordAuthenticationFilter.class);
 		return http.build();
 	}
 
