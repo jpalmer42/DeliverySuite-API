@@ -40,6 +40,7 @@ public class ServiceFirebase {
 	private void init() throws FileNotFoundException, IOException {
 		var res = ServiceFirebase.class.getResource("/serviceAccountKey.json");
 		if (res == null) {
+			System.out.println(res.getPath());
 			throw new FileNotFoundException("serviceAccountKey.json not found");
 		}
 
