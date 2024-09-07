@@ -42,6 +42,9 @@ class ApiMainApplicationTests {
 		var agent = popAgent(delCo);
 
 		deliveryCompany.updateDispatcher(delCo.getId(), agent.getId());
+		
+		serviceAgent.setOnDuty(agent.getId(), true);
+		serviceAgent.setOnDuty(agent.getId(), false);
 	}
 
 	Collection<DaoDeliveryType> popDeliveryTypes() {
