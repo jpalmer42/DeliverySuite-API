@@ -4,12 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
-
 @Service
 public class AppConfig {
 	@Autowired
 	private Environment environment;
-
 
 	private AppEnvironment appEnvironment = null;
 
@@ -18,14 +16,17 @@ public class AppConfig {
 			return appEnvironment;
 
 		var profiles = environment.getActiveProfiles();
-		if (profiles != null && profiles.length > 0) {
-			if (profiles[0].equals(AppEnvironment.prod.code)) {
+		for (String profile : profiles) {
+			if (profile.contains(AppEnvironment.prod.name())) {
 				appEnvironment = AppEnvironment.prod;
 			}
-			if (profiles[0].equals(AppEnvironment.test.code)) {
+			if (profile.contains(AppEnvironment.test.name())) {
 				appEnvironment = AppEnvironment.test;
 			}
-			if (profiles[0].equals(AppEnvironment.dev.code)) {
+			if (profile.contains(AppEnvironment.dev.name())) {
+				appEnvironment = AppEnvironment.dev;
+			}
+			if (profile.contains(AppEnvironment.local.name())) {
 				appEnvironment = AppEnvironment.dev;
 			}
 		}
