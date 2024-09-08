@@ -16,14 +16,13 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name = "firebaseAgents")
 public class DaoFirebaseAgent extends BaseEntity {
-	
+
 	@ManyToOne
 	@JoinColumn(name = "agentId")
 	private DaoAgent	agent;
 
 	@Column(name = "agentId", updatable = false, insertable = false)
-	private Long agentId;
+	private Long		agentId;
 
-	
-	private String firebaseId;
+	private String		firebaseId;
 }

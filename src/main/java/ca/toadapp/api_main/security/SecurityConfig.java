@@ -19,18 +19,18 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity
 public class SecurityConfig {
 	@Autowired
-	FilterAuthFirebase filterFirebase;
+	FilterAuthFirebase	filterFirebase;
 
 	@Autowired
-	FilterAuthAPI filterAPI;
+	FilterAuthAPI		filterAPI;
 
 	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http.csrf(csrf -> csrf.disable());
-		http.authorizeHttpRequests(auth -> auth.requestMatchers("/list/**").permitAll());
-		http.authorizeHttpRequests(auth -> auth.anyRequest().authenticated());
-		http.addFilterBefore(filterFirebase, UsernamePasswordAuthenticationFilter.class);
-		http.addFilterBefore(filterAPI, UsernamePasswordAuthenticationFilter.class);
+	public SecurityFilterChain securityFilterChain( HttpSecurity http ) throws Exception {
+		http.csrf( csrf -> csrf.disable() );
+		http.authorizeHttpRequests( auth -> auth.requestMatchers( "/list/**" ).permitAll() );
+		http.authorizeHttpRequests( auth -> auth.anyRequest().authenticated() );
+		http.addFilterBefore( filterFirebase, UsernamePasswordAuthenticationFilter.class );
+		http.addFilterBefore( filterAPI, UsernamePasswordAuthenticationFilter.class );
 		return http.build();
 	}
 
@@ -40,19 +40,19 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+	public AuthenticationManager authenticationManager( AuthenticationConfiguration config ) throws Exception {
 		return config.getAuthenticationManager();
 	}
 
 	private class FirebaseAuthProvider implements AuthenticationProvider {
 
 		@Override
-		public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+		public Authentication authenticate( Authentication authentication ) throws AuthenticationException {
 			return authentication;
 		}
 
 		@Override
-		public boolean supports(Class<?> authentication) {
+		public boolean supports( Class<?> authentication ) {
 			return false;
 		}
 

@@ -15,8 +15,7 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name = "apiKeys")
 public class DaoAPIKey extends BaseEntity {
-	private String key;
-	
-	
-	private Collection<APIAccessRights> rights;
+	private String						key;
+
+	private Collection<APIAccessRights>	rights;
 }

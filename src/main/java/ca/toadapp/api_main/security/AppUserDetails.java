@@ -10,15 +10,15 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class AppUserDetails implements UserDetails {
-	private static final long serialVersionUID = 5185256426170366959L;
+	private static final long	serialVersionUID	= 5185256426170366959L;
 
-	private String name;
-	private String email;
-	private String uid;
+	private String				name;
+	private String				email;
+	private String				uid;
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return List.of(UserAuthority.firebaseUserAuthority);
+		return List.of( UserAuthority.firebaseUserAuthority );
 	}
 
 	@Override

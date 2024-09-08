@@ -10,35 +10,36 @@ import lombok.extern.java.Log;
 
 @Log
 public class AppAuthenticationToken extends BearerTokenAuthenticationToken {
-	private static final long serialVersionUID = -3095054057370058734L;
+	private static final long	serialVersionUID	= -3095054057370058734L;
 
-	private FirebaseToken firebaseToken;
+	private FirebaseToken		firebaseToken;
 
-	private UserDetails userDetails;
+	private UserDetails			userDetails;
 
-	private static String anonymousSecret = null;
+	private static String		anonymousSecret		= null;
 
-	public AppAuthenticationToken(String firebaseTokenEncoded, ServiceFirebase firebaseService) {
-		super(firebaseTokenEncoded);
+	public AppAuthenticationToken( String firebaseTokenEncoded, ServiceFirebase firebaseService ) {
+		super( firebaseTokenEncoded );
 		try {
 
-			if (anonymousSecret == null) {
-				anonymousSecret = firebaseService.getRemoteConfigString("anonymousSecret", null);
-				if (anonymousSecret == null)
-					throw new Exception("anonymousSecret not set in RemoteConfig");
+			if( anonymousSecret == null ) {
+				anonymousSecret = firebaseService.getRemoteConfigString( "anonymousSecret", null );
+				if( anonymousSecret == null )
+					throw new Exception( "anonymousSecret not set in RemoteConfig" );
 			}
 
-			if (firebaseTokenEncoded.equals(anonymousSecret)) {
-				super.setAuthenticated(true);
-				userDetails = new AnonymousUserDetails("anonymous", "anonymous", "anonymous");
-			} else {
-				firebaseToken = firebaseService.verifyToken(firebaseTokenEncoded);
-				super.setAuthenticated(true);
-				userDetails = new AppUserDetails(firebaseToken.getName(), firebaseToken.getEmail(),
-						firebaseToken.getUid());
+			if( firebaseTokenEncoded.equals( anonymousSecret ) ) {
+				super.setAuthenticated( true );
+				userDetails = new AnonymousUserDetails( "anonymous", "anonymous", "anonymous" );
 			}
-		} catch (Exception ex) {
-			log.severe(ex.getMessage());
+			else {
+				firebaseToken = firebaseService.verifyToken( firebaseTokenEncoded );
+				super.setAuthenticated( true );
+				userDetails = new AppUserDetails( firebaseToken.getName(), firebaseToken.getEmail(), firebaseToken.getUid() );
+			}
+		}
+		catch ( Exception ex ) {
+			log.severe( ex.getMessage() );
 		}
 	}
 

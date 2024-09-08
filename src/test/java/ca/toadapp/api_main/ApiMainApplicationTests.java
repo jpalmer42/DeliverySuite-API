@@ -24,12 +24,15 @@ import ca.toadapp.common.data.entity.DaoPlacePickup;
 import ca.toadapp.common.data.enumeration.AgentRoles;
 import ca.toadapp.common.data.enumeration.NotificationTypes;
 import ca.toadapp.common.data.enumeration.PaymentTypes;
+import ca.toadapp.common.exceptions.MissingDataException;
+import ca.toadapp.common.exceptions.RecordNotFoundException;
 import ca.toadapp.common.service.ServiceAgent;
 import ca.toadapp.common.service.ServiceDelCo;
 import ca.toadapp.common.service.ServiceDeliveryTypes;
 import ca.toadapp.common.service.ServiceItem;
 import ca.toadapp.common.service.ServicePlaceDropoff;
 import ca.toadapp.common.service.ServicePlacePickup;
+import jakarta.transaction.Transactional;
 
 @SpringBootTest
 class ApiMainApplicationTests {
@@ -51,8 +54,23 @@ class ApiMainApplicationTests {
 	@Autowired
 	private ServicePlaceDropoff		serviceDropoff;
 
+//	@Test
+	void itemTestWithoutAgent() throws MissingDataException, RecordNotFoundException {
+		var delCo = deliveryCompany.getById( 1L );
+		final var item = addItem( delCo, null );
+
+	}
+
 	@Test
-	void databaseTest() {
+	void itemTestWithAgent() throws MissingDataException, RecordNotFoundException {
+		var agent = serviceAgent.getByAgentId( "god@stork" );
+		var delCo = agent.getDeliveryCompany();
+
+		final var item = addItem( delCo, agent );
+	}
+
+//	@Test
+	void databaseTest() throws MissingDataException, RecordNotFoundException {
 		var delTypes = popDeliveryTypes();
 		var delCo = popDeliveryCompany( delTypes );
 		var agent = popAgent( delCo );
@@ -62,25 +80,30 @@ class ApiMainApplicationTests {
 		serviceAgent.setOnDuty( agent.getId(), true );
 		serviceAgent.setOnDuty( agent.getId(), false );
 
-		final var item = addItem( agent );
+		final var item = addItem( delCo, agent );
 	}
 
-	private DaoItem addItem( DaoAgent agent ) {
-		var pickup = new DaoPlacePickup( "placeId", "Name", "Address", "Phone", 43.369986691835855, -80.98213896348206, agent.getDeliveryCompany(), agent.getDeliveryCompanyId(), false );
+	private DaoItem addItem( DaoDelCo delCo, DaoAgent agent ) throws MissingDataException, RecordNotFoundException {
+		var pickup = new DaoPlacePickup( "placeId", "Name", "Address", "Phone", 43.3866002, -80.9688884, delCo, delCo.getId(), true );
 		pickup = servicePickup.save( pickup );
 
-		var dropoff = new DaoPlaceDropoff( "placeId", "Name", "Address", "Phone", 43.369986691835855, -80.98213896348206 );
+		var dropoff = new DaoPlaceDropoff( "placeId", "Name", "Address", "Phone", 43.3234011, -80.8367404 );
 		dropoff = serviceDropoff.save( dropoff );
 
 		final var item = new DaoItem( //
-				pickup, pickup.getPlaceId(), "Address2", "Comments", //
-				dropoff, dropoff.getPlaceId(), "Address2", "Comments", //
+				pickup, pickup.getPlaceId(), //
+				"PickupAddress2", "Pickup Comments", //
+//				null, null,
+				dropoff, dropoff.getPlaceId(), //
+				"DropoffAddress2", "Dropoff Comments", //
 				LocalDateTime.now(), LocalDateTime.now(), //
-				agent.getDeliveryCompany(), agent.getDeliveryCompanyId(), //
-				agent, agent.getId(), //
-				2, 4, false, false, //
+				delCo, delCo.getId(), //
+				agent, agent == null ? null : agent.getId(), //
+				-1, -1, //
+				false, // autoAssignDriver
+				false, // requiresSmartServe
 				25.00, PaymentTypes.prepaid, // Goods
-				9.00, PaymentTypes.account, // Delivery
+				0.00, PaymentTypes.unknown, // Delivery
 				5.00, PaymentTypes.cash, // Delivery Tip
 				null, // requestCancelled
 				LocalDateTime.now(), // requestInitial
@@ -88,9 +111,10 @@ class ApiMainApplicationTests {
 				null, // assignmentInitial
 				null, // assignmentAcknowledged
 				null, // onRouteInitial
-				null, //
-				null, //
-				null//
+				null, // onRouteETA
+				null, // packagePickedUp
+				null, // packageDeliveryETA
+				null // packageDelivered
 		);
 
 		return serviceItem.save( item );

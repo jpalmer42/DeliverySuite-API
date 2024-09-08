@@ -17,29 +17,29 @@ import lombok.extern.java.Log;
 public class FilterAuthAPI extends OncePerRequestFilter {
 
 	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-			throws ServletException, IOException {
+	protected void doFilterInternal( HttpServletRequest request, HttpServletResponse response, FilterChain filterChain ) throws ServletException, IOException {
 
 		// If a previous filter processed, then skip this filter
-		if (SecurityContextHolder.getContext().getAuthentication() == null) {
-			log.info(request.getMethod());
-			log.info(request.getRequestURI());
+		if( SecurityContextHolder.getContext().getAuthentication() == null ) {
+			log.info( request.getMethod() );
+			log.info( request.getRequestURI() );
 
 			try {
-				String authHeader = request.getHeader("Authorization");
+				String authHeader = request.getHeader( "Authorization" );
 
-				if (authHeader != null && authHeader.startsWith("API-KEY ")) {
-					final String apiKey = authHeader.substring(8);
-					var authToken = new AppAuthenticationKey(apiKey);
-					SecurityContextHolder.getContext().setAuthentication(authToken);
+				if( authHeader != null && authHeader.startsWith( "API-KEY " ) ) {
+					final String apiKey = authHeader.substring( 8 );
+					var authToken = new AppAuthenticationKey( apiKey );
+					SecurityContextHolder.getContext().setAuthentication( authToken );
 				}
 
-			} catch (Exception ex) {
-				throw new ServletException(ex.getMessage());
+			}
+			catch ( Exception ex ) {
+				throw new ServletException( ex.getMessage() );
 			}
 		}
 
-		filterChain.doFilter(request, response);
+		filterChain.doFilter( request, response );
 	}
 
 }

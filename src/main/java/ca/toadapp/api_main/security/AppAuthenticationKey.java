@@ -5,10 +5,10 @@ import java.util.Collection;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
-public class AppAuthenticationKey implements Authentication{
+public class AppAuthenticationKey implements Authentication {
 	private static final long serialVersionUID = 3377674085942766277L;
 
-	public AppAuthenticationKey(String apiKey) {
+	public AppAuthenticationKey( String apiKey ) {
 		// TODO: validate Key Load info
 	}
 
@@ -49,9 +49,9 @@ public class AppAuthenticationKey implements Authentication{
 	}
 
 	@Override
-	public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {
+	public void setAuthenticated( boolean isAuthenticated ) throws IllegalArgumentException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }
