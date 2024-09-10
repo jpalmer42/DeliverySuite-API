@@ -59,7 +59,7 @@ class ApiMainApplicationTests {
 
 	}
 
-//	@Test
+	@Test
 	void itemTestWithAgent() throws MissingDataException, RecordNotFoundException {
 		var agent = serviceAgent.getByAgentId( "god@stork" );
 		var delCo = agent.getDeliveryCompany();
@@ -67,7 +67,7 @@ class ApiMainApplicationTests {
 		final var item = addItem( delCo, agent );
 	}
 
-	@Test
+//	@Test
 	void databaseTest() throws MissingDataException, RecordNotFoundException {
 		var delTypes = popDeliveryTypes();
 		var delCo = popDeliveryCompany( delTypes );
