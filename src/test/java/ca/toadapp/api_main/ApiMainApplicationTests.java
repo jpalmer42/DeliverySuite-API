@@ -22,7 +22,6 @@ import ca.toadapp.common.data.entity.DaoItem;
 import ca.toadapp.common.data.entity.DaoPlaceDropoff;
 import ca.toadapp.common.data.entity.DaoPlacePickup;
 import ca.toadapp.common.data.enumeration.AgentRoles;
-import ca.toadapp.common.data.enumeration.NotificationTypes;
 import ca.toadapp.common.data.enumeration.PaymentTypes;
 import ca.toadapp.common.exceptions.MissingDataException;
 import ca.toadapp.common.exceptions.RecordNotFoundException;
@@ -32,7 +31,6 @@ import ca.toadapp.common.service.ServiceDeliveryTypes;
 import ca.toadapp.common.service.ServiceItem;
 import ca.toadapp.common.service.ServicePlaceDropoff;
 import ca.toadapp.common.service.ServicePlacePickup;
-import jakarta.transaction.Transactional;
 
 @SpringBootTest
 class ApiMainApplicationTests {
@@ -172,8 +170,8 @@ class ApiMainApplicationTests {
 		serviceAgent.setLocation( location );
 
 		final var notificationOptions = new ArrayList<DaoAgentNotification>();
-		notificationOptions.add( new DaoAgentNotification( null, agent.getId(), NotificationTypes.sms, "5558675309", true ) );
-		notificationOptions.add( new DaoAgentNotification( null, agent.getId(), NotificationTypes.gcm, "firebaseGCM", false ) );
+		notificationOptions.add( new DaoAgentNotification( null, agent.getId(), "sms", "5558675309", true ) );
+		notificationOptions.add( new DaoAgentNotification( null, agent.getId(), "gcm", "firebaseGCM", false ) );
 		serviceAgent.setNotificationConfig( notificationOptions );
 		return agent;
 	}
