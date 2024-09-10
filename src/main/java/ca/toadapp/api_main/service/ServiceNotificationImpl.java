@@ -11,7 +11,7 @@ public class ServiceNotificationImpl implements ServiceNotification {
 
 	@Override
 	public boolean sendMessage( Long providerId, Long agentId, String message ) {
-		log.info( String.format( "provider:%ld, agent:%ld, msg:%s", providerId, agentId, message ) );
+		log.info( String.format( "provider:%d, agent:%d, msg:%s", providerId, agentId, message ) );
 		return true;
 	}
 
