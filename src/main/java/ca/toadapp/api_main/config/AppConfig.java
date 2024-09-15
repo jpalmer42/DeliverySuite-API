@@ -1,10 +1,10 @@
 package ca.toadapp.api_main.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Service;
 
-@Service
+@Configuration
 public class AppConfig {
 	@Autowired
 	private Environment		environment;
